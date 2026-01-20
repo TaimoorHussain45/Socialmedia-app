@@ -1,53 +1,57 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+// const tintColorLight = "#000000";
+// export default {
+//   light: {
 
-import { Platform } from 'react-native';
+//   },
+// };
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+export const theme = {
+  colors: {
+    white: "#FFFFFF",
+    black: "#000000",
+    lightGray: "#F5F5F5",
+    primary: "#00C26F",
+    primaryDark: "#00AC62",
+    dark: "#3E3E3E",
+    darkLight: "#E1E1E1",
+    gray: "#e3e3e3",
+    text: "#494949",
+    textLight: "#7C7C7C",
+    textDark: "#1D1D1D",
+    rose: "#ef4444",
+    roseLight: "#f87171",
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    offBlack: "#0D0D0D",
+    halfwhite: "rgba(255,255,255,0.3)",
+    frostWhite: "rgba(255,255,255,0.9)",
+    transparentWhite: "rgba(255,255,255,0.5)",
+
+    blueGray: "#9BA1A6",
+    tabIconDefault: "#9BA1A6",
+
+    shadow: "#6C72783D",
+    coolGrayTransparent: "#6C72783D",
+    coolGray: "#6C7278",
+    crimsonRed: "#E11304",
+    crimsonRedTransparent: "rgba(225, 19, 4, 0.25)",
+    charcoalGray: "#1A1C1E",
+    darkBlueGray: "#1B1E23",
+    offWhite: "#EFF0F6",
+    steelBlueGray: "#97A2B0",
+    charcoalBlackTransparent: "#141414",
+    darkGray: "#4D4D4D",
+    silverGray: "#BFBFBF",
+    darkSlateGray: "#26292E",
+    veryLightGray: "#D9D9D9",
+    courseContent: "#1D2025",
+    gunmetalGray: "#1D2025",
+    softBlack: "#131313",
+
+    blackTransparent: "rgba(0,0,0,0.5)",
+    neutralGray: "#838383",
+    transcriptView: "#26292E",
+    tab: "#14141480",
+    mutedLavenderGray: "#9A9BB1",
+    coolSlate: "#536471",
   },
 };
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
