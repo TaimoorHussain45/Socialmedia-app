@@ -5,10 +5,11 @@ import Typography from "@/components/Typography";
 import fonts from "@/constants/fonts";
 import { Metrics } from "@/constants/metrics";
 import { theme } from "@/constants/theme";
+import { supabase } from "@/lib/supabase";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 interface FormData {
   name: string;
   email: string;
@@ -24,20 +25,38 @@ const initialFormData: FormData = {
 const SignUp = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
   const updateField = (key: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
 
+  const handlesignUpWithEmail = async () => {
+    setLoading(true);
+    try {
+      const res = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log("====================================");
+      console.log(res);
+      console.log("====================================");
+      router.replace("/(auth)/signIn");
+    } catch (error) {
+      Alert.alert(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
-    <ScreenWrapper bg={theme.colors.white}>
+    <ScreenWrapper>
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
         enableOnAndroid
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.container}>
+        <View style={styles.screenContainer}>
           <Typography
             fontSize={Metrics.fontSizeXXLarge}
             fontFamily={fonts.semiBold}
@@ -76,7 +95,17 @@ const SignUp = () => {
             onChangeText={(text) => updateField("password", text)}
             iconColor={theme.colors.crimsonRed}
           />
-          <CustomButton title="Login" style={styles.customButton} />
+          <CustomButton
+            title="Sign Up"
+            style={styles.primaryButton}
+            onPress={handlesignUpWithEmail}
+          />
+          <View style={styles.authFooterContainer}>
+            <Typography>Already have an account? </Typography>
+            <TouchableOpacity onPress={() => router.replace("/(auth)/signIn")}>
+              <Typography fontFamily={fonts.semiBold}>Sign in</Typography>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAwareScrollView>
     </ScreenWrapper>
@@ -84,31 +113,55 @@ const SignUp = () => {
 };
 
 export default SignUp;
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 20,
+//   },
+//   ForgotPassword: {
+//     textAlign: "right",
+//     color: theme.colors.crimsonRed,
+//     fontSize: 12,
+//     fontFamily: fonts.semiBold,
+//   },
+//   inputContainer: {
+//     marginVertical: 15,
+//     gap: 2,
+//   },
+//   passwordContainer: {
+//     marginVertical: 15,
+//     gap: 3,
+//   },
+//   customButton: {
+//     marginTop: 20,
+//   },
+//   loginContainer: {
+//     flexDirection: "row",
+//     justifyContent: "center",
+//     gap: 6,
+//     marginBottom: 20,
+//   },
+//   signUp: {
+//     flexDirection: "row",
+//     justifyContent: "center",
+//     gap: Metrics.spacingTiny,
+//     marginVertical: 20,
+//   },
+// });
 const styles = StyleSheet.create({
-  container: {
+  screenContainer: {
     flex: 1,
+    padding: Metrics.spacingMedium,
   },
-  ForgotPassword: {
-    textAlign: "right",
-    color: theme.colors.crimsonRed,
-    fontSize: 12,
-    fontFamily: fonts.semiBold,
+
+  primaryButton: {
+    marginTop: Metrics.spacingLarge,
   },
-  inputContainer: {
-    marginVertical: 15,
-    gap: 2,
-  },
-  passwordContainer: {
-    marginVertical: 15,
-    gap: 3,
-  },
-  customButton: {
-    marginTop: 20,
-  },
-  loginContainer: {
+
+  authFooterContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 6,
-    marginBottom: 20,
+    gap: Metrics.spacingTiny,
+    marginVertical: Metrics.spacingLarge,
   },
 });
