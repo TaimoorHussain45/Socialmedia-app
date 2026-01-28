@@ -11,24 +11,19 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const handleReset = async () => {
-    if (!email) {
-      setError("Please enter your email");
+  const handleUpdatePassword = async () => {
+    if (!password) {
+      setError("Please enter your password");
       return;
     }
-    try {
-      const res = await supabase.auth.resetPasswordForEmail(email);
-      console.log("====================================");
-      console.log(res);
-      console.log("====================================");
-      router.replace("/(auth)/resetPassword");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    }
+    const res = await supabase.auth.updateUser({
+      password,
+    });
+    console.log(res);
   };
 
   return (
@@ -37,30 +32,29 @@ const ForgotPassword = () => {
         <View>
           <BackButton onPress={() => router.back()} />
         </View>
-        <Typography fontSize={16} fontFamily={fonts.bold}>
-          Forgot your password?
+        <Typography fontFamily={fonts.semiBold} fontSize={16}>
+          Update Password
         </Typography>
-
         <Input
-          iconName="mail"
-          placeholdertext="Enter your email"
-          iconColor={theme.colors.crimsonRed}
-          value={email}
+          placeholder="Enter your password"
+          type="password"
+          iconName="lock"
+          value={password}
           errorText={error}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setPassword(text)}
+          iconColor={theme.colors.crimsonRed}
         />
-
-        <CustomButton title="Send reset request" onPress={handleReset} />
+        <CustomButton title="Update Password" onPress={handleUpdatePassword} />
       </View>
     </ScreenWrapper>
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Metrics.spacingLarge,
+    padding: Metrics.spacingMedium,
   },
 });

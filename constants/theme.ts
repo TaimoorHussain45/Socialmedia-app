@@ -53,5 +53,6 @@ export const theme = {
     tab: "#14141480",
     mutedLavenderGray: "#9A9BB1",
     coolSlate: "#536471",
+    gainsboro: "#e8e8e8",
   },
 };

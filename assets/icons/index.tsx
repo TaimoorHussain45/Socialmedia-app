@@ -45,6 +45,7 @@ const icons: Record<string, React.ComponentType<any>> = {
   send: Send,
   delete: Delete,
   logout: Logout,
+  ArrowLeft: ArrowLeft,
   image: Image,
   video: Video,
   eye: Eye,

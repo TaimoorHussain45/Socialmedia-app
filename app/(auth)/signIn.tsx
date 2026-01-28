@@ -1,3 +1,4 @@
+import BackButton from "@/components/Buttons/BackButton";
 import CustomButton from "@/components/Buttons/CustomButton";
 import Input from "@/components/inputs/input";
 import ScreenWrapper from "@/components/ScreenWrapper";
@@ -6,7 +7,7 @@ import fonts from "@/constants/fonts";
 import { Metrics } from "@/constants/metrics";
 import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -22,6 +23,7 @@ const initialFormData: FormData = {
 };
 
 const SignIn = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const updateField = (key: keyof FormData, value: any) => {
@@ -29,7 +31,10 @@ const SignIn = () => {
     setFormData((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
+
   const validateForm = () => {
+    // console.log("Validating form...");
+    // console.log("Password:", formData.password);
     const newErrors: Record<string, string> = {};
     if (!formData.email) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
@@ -42,18 +47,18 @@ const SignIn = () => {
     return Object.keys(newErrors).length === 0;
   };
   const handleSignInWithEmail = async () => {
-    if (!validateForm) return;
+    if (!validateForm()) return;
     try {
       const res = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
       console.log("====================================");
-      console.log(res);
+      console.log(res.data.session);
       console.log("====================================");
-      router.push("/welcome");
-    } catch (error) {
-      if (error) Alert.alert(error.message);
+      // router.push("/home");
+    } catch (err) {
+      if (err instanceof Error) Alert.alert(err.message);
     }
   };
 
@@ -66,6 +71,9 @@ const SignIn = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.screenContainer}>
+          <View>
+            <BackButton onPress={() => router.back()} />
+          </View>
           <Typography
             fontSize={Metrics.fontSizeXXLarge}
             fontFamily={fonts.semiBold}
@@ -110,7 +118,7 @@ const SignIn = () => {
             onPress={handleSignInWithEmail}
           />
           <View style={styles.authFooterContainer}>
-            <Typography>Don't have an account? </Typography>
+            <Typography>Don&apos;t have an account? </Typography>
             <TouchableOpacity onPress={() => router.replace("/(auth)/signUp")}>
               <Typography fontFamily={fonts.semiBold}>Sign Up</Typography>
             </TouchableOpacity>

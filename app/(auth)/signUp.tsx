@@ -1,3 +1,4 @@
+import BackButton from "@/components/Buttons/BackButton";
 import CustomButton from "@/components/Buttons/CustomButton";
 import Input from "@/components/inputs/input";
 import ScreenWrapper from "@/components/ScreenWrapper";
@@ -30,8 +31,21 @@ const SignUp = () => {
     setFormData((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
-
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (formData.name) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Invalid email address";
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 8)
+      newErrors.password = "Minimum 8 characters";
+    console.log("Validation errors:", newErrors);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handlesignUpWithEmail = async () => {
+    if (!validateForm()) return;
     setLoading(true);
     try {
       const res = await supabase.auth.signUp({
@@ -57,11 +71,14 @@ const SignUp = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.screenContainer}>
+          <View>
+            <BackButton onPress={() => router.replace("/(auth)/signIn")} />
+          </View>
           <Typography
             fontSize={Metrics.fontSizeXXLarge}
             fontFamily={fonts.semiBold}
           >
-            Let's,
+            Let&apos;s,
           </Typography>
           <Typography
             fontSize={Metrics.fontSizeXXLarge}
